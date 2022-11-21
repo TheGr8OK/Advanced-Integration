@@ -8,10 +8,10 @@ public class Grid {
     Ship[] ships;
     Station[] stations;
 
-    public Grid(int m, int n){
+    public Grid(){
         //no items in the same cell
-        this.m = m<5?5:(m>15)?15:m;
-        this.n = n<5?5:(n>15)?15:n;
+        m = ThreadLocal.current().nextInt(5, 16);
+        n = ThreadLocal.current().nextInt(5, 16);
 
         cells = new Cell[n][m];
 

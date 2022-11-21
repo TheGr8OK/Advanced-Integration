@@ -42,20 +42,25 @@ public class Agent {
         if(!(station.x==x) || !(station.y ==y)){
             throw new Error("agent is not in the same position as the station!");
         }
+        timeStep();
         station.passengersSaved += capacity - freeSpace;
         freeSpace = capacity;
     }
 
 
     public void retrieveBlackBox(Ship ship){
+        if(!(ship.x==x) || !(ship.y ==y)){
+            throw new Error("agent is not in the same position as the ship!");
+        }
+        timeStep();
         if (ship.isSunk){
             if (!ship.blackBoxDestroyed){
                 blackBoxesRetrieved += 1;
+                ship.blackBoxDestroyed=true;
             }
-        }
     }
 
-    
+
     public void moveRight(){
         
     }
