@@ -1,10 +1,13 @@
 import java.util.concurrent.ThreadLocalRandom;
 public class app{
 
+
+    public String GenGrid(){
+        String rep = "";
+        Grid grid = new Grid();
+        return rep;
+    }
     public static void main(String[] args) {
-        System.out.println(ThreadLocalRandom.current().nextInt(0, 4));
-        System.out.println(ThreadLocalRandom.current().nextInt(0, 4));
-        System.out.println(ThreadLocalRandom.current().nextInt(0, 4));
-        System.out.println(ThreadLocalRandom.current().nextInt(0, 4));
+        
     }
     }
