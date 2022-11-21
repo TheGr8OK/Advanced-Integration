@@ -59,6 +59,7 @@ public class Agent {
                 ship.blackBoxDestroyed=true;
             }
     }
+}
 
 
     public void moveRight(){

@@ -10,8 +10,8 @@ public class Grid {
 
     public Grid(){
         //no items in the same cell
-        m = ThreadLocal.current().nextInt(5, 16);
-        n = ThreadLocal.current().nextInt(5, 16);
+        m = ThreadLocalRandom.current().nextInt(5, 16);
+        n = ThreadLocalRandom.current().nextInt(5, 16);
 
         cells = new Cell[n][m];
 
