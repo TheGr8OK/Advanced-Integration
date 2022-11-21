@@ -1,17 +1,17 @@
 public class Agent {
     Grid grid;
-    int capacity;
+    int freeSpace;
     int x;
     int y;
-    int originalcapacity;
+    int capacity;
     int blackBoxesRetrieved;
 
-    public Agent(int capacity, int x, int y, Grid grid){
-        this.capacity=capacity<30?30:(capacity>100)?100:capacity;
+    public Agent(int capacity, int y, int x, Grid grid){
+        this.freeSpace=capacity<30?30:(capacity>100)?100:capacity;
         this.x = x;
         this.y = y;
         this.grid = grid;
-        originalcapacity = this.capacity;
+        capacity = this.freeSpace;
         blackBoxesRetrieved = 0;
         //handle if x and y outside grid
     }
@@ -20,19 +20,33 @@ public class Agent {
 
     }
     
-    public void pickupPassengers(Ship ship){
-        if (capacity >= ship.passengers){
-            capacity -= ship.passengers;
+    public void pickUpPassengers(Ship ship){
+        if(!(ship.x==x) || !(ship.y ==y)){
+            throw new Error("agent is not in the same position as the ship!");
+        }
+
+        timeStep();
+        if (freeSpace >= ship.passengers){
+            freeSpace -= ship.passengers;
+            ship.passengers=0;
         }
         else{
-            ship.passengers -= capacity;
-            capacity = 0;
+            ship.passengers -= freeSpace;
+            freeSpace = 0;
         }
+        
     }
+
+
     public void dropPassengers(Station station){
-        station.passengersSaved += originalcapacity - capacity;
-        capacity = originalcapacity;
+        if(!(station.x==x) || !(station.y ==y)){
+            throw new Error("agent is not in the same position as the station!");
+        }
+        station.passengersSaved += capacity - freeSpace;
+        freeSpace = capacity;
     }
+
+
     public void retrieveBlackBox(Ship ship){
         if (ship.isSunk){
             if (!ship.blackBoxDestroyed){
@@ -40,6 +54,8 @@ public class Agent {
             }
         }
     }
+
+    
     public void moveRight(){
         
     }
