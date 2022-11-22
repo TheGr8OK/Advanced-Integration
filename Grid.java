@@ -3,6 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Grid {
     int m;
     int n;
+    int deaths;
     Cell[][] cells;
     Agent agent;
     Ship[] ships;
@@ -12,6 +13,8 @@ public class Grid {
         //no items in the same cell
         m = ThreadLocalRandom.current().nextInt(5, 16);
         n = ThreadLocalRandom.current().nextInt(5, 16);
+
+        deaths =0; 
 
         cells = new Cell[n][m];
 
@@ -38,7 +41,7 @@ public class Grid {
                 int shipPositionX = ThreadLocalRandom.current().nextInt(0, m);
                 int shipPositionY = ThreadLocalRandom.current().nextInt(0, n);
                 if(!cells[shipPositionY][shipPositionX].isOccupied){
-                    ships[i] = new Ship(numberOfPassengers, shipPositionY, shipPositionX);
+                    ships[i] = new Ship(numberOfPassengers, shipPositionY, shipPositionX, this);
                     cells[shipPositionY][shipPositionX].isOccupied = true;
                     cells[shipPositionY][shipPositionX].occupant= ships[i];
                     break;

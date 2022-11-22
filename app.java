@@ -24,7 +24,7 @@ public class app{
         rep += ";";
         return rep;
     }
-    public static String solve(Grid grid, String strategy, String visualize){
+    public static String Solve(Grid grid, String strategy, Boolean visualize){
         String output = "";
         return output;
     }
