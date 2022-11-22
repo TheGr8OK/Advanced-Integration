@@ -6,6 +6,14 @@ public class Agent {
     int capacity;
     int blackBoxesRetrieved;
 
+    public Agent(int capacity, int y, int x){
+        this.freeSpace=capacity<30?30:(capacity>100)?100:capacity;
+        this.x = x;
+        this.y = y;
+        this.capacity = freeSpace;
+        blackBoxesRetrieved = 0;
+    }
+
     public Agent(int capacity, int y, int x, Grid grid){
         this.freeSpace=capacity<30?30:(capacity>100)?100:capacity;
         this.x = x;

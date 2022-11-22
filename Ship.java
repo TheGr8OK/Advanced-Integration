@@ -8,6 +8,15 @@ public class Ship {
     int x;
 
 
+    public Ship(int passengers, int y, int x){
+        blackBoxDamage = 0; // check public test 0 or 1
+        this.passengers = passengers;
+        isSunk = false;
+        blackBoxDestroyed = false;
+        this.y=y;
+        this.x=x;
+    }
+
     public Ship(int passengers, int y, int x, Grid grid) {
         blackBoxDamage = 0; // check public test 0 or 1
         this.passengers = passengers;

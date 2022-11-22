@@ -9,6 +9,22 @@ public class Grid {
     Ship[] ships;
     Station[] stations;
 
+    public Grid(int m, int n, Agent agent, Ship[] ships, Station[] stations){
+        this.m = m;
+        this.n = n;
+        this.agent= agent;
+        this.ships= ships;
+        this.stations = stations;
+        
+        cells = new Cell[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                cells[i][j] = new Cell(i, j);
+            }
+        }
+    }
+
     public Grid(){
         //no items in the same cell
         m = ThreadLocalRandom.current().nextInt(5, 16);
@@ -30,6 +46,7 @@ public class Grid {
         int agentCapacity = ThreadLocalRandom.current().nextInt(30, 101);
         agent = new Agent(agentCapacity, agentY, agentX, this);
         cells[agentY][agentX].isOccupied = true;
+        cells[agentY][agentX].occupant = agent;
 
         int numberOfShips = ThreadLocalRandom.current().nextInt(1, n*m +1);
         ships = new Ship[numberOfShips];
