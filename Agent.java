@@ -11,7 +11,7 @@ public class Agent {
         this.x = x;
         this.y = y;
         this.grid = grid;
-        capacity = this.freeSpace;
+        this.capacity = freeSpace;
         blackBoxesRetrieved = 0;
         //handle if x and y outside grid
     }
