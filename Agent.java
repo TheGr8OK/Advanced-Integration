@@ -17,14 +17,15 @@ public class Agent {
     }
 
     public void timeStep(){
-
+        for (int i = 0; i < grid.ships.length; i++) {
+            grid.ships[i].timeStep();
+        }        
     }
     
     public void pickUpPassengers(Ship ship){
         if(!(ship.x==x) || !(ship.y ==y)){
             throw new Error("agent is not in the same position as the ship!");
         }
-
         timeStep();
         if (freeSpace >= ship.passengers){
             freeSpace -= ship.passengers;
