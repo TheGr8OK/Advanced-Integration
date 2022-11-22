@@ -24,9 +24,45 @@ public class app{
         rep += ";";
         return rep;
     }
-    public static String solve(Grid grid, String strategy, String visualize){
+    public static String Solve(Grid grid, String strategy, Boolean visualize){
         String output = "";
+        if (strategy.equals("BF")){
+            SolveBF();
+        }
+        if (strategy.equals("DF")){
+            SolveDF();
+        }
+        if (strategy.equals("ID")){
+            SolveID();
+        }
+        if (strategy.equals("GR1")){
+            SolveGR();
+        }
+        if (strategy.equals("GR2")){
+            SolveGR();
+        }
+        if (strategy.equals("AS1")){
+            SolveAS();
+        }
+        if (strategy.equals("AS2")){
+            SolveAS();
+        }
         return output;
+    }
+    public static void SolveBF(){
+
+    }
+    public static void SolveDF(){
+        
+    }
+    public static void SolveID(){
+        
+    }
+    public static void SolveGR(){
+        
+    }
+    public static void SolveAS(){
+        
     }
 
     public static void main(String[] args) {
