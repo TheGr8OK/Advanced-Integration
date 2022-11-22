@@ -22,21 +22,21 @@ public class Grid {
         }
 
         //genertae Agent position
-        int agentX = ThreadLocalRandom.current().nextInt(0, m+1);
-        int agentY = ThreadLocalRandom.current().nextInt(0, n+1);
+        int agentX = ThreadLocalRandom.current().nextInt(0, m);
+        int agentY = ThreadLocalRandom.current().nextInt(0, n);
         int agentCapacity = ThreadLocalRandom.current().nextInt(30, 101);
         agent = new Agent(agentCapacity, agentY, agentX, this);
         cells[agentY][agentX].isOccupied = true;
 
-        int numberOfShips = ThreadLocalRandom.current().nextInt(1, (n*m/4) +1);
+        int numberOfShips = ThreadLocalRandom.current().nextInt(1, n*m +1);
         ships = new Ship[numberOfShips];
 
         //generate ships on random locations
         for (int i = 0; i < ships.length; i++) {
             int numberOfPassengers = ThreadLocalRandom.current().nextInt(1, 101);
             while(true){
-                int shipPositionX = ThreadLocalRandom.current().nextInt(0, m+1);
-                int shipPositionY = ThreadLocalRandom.current().nextInt(0, n+1);
+                int shipPositionX = ThreadLocalRandom.current().nextInt(0, m);
+                int shipPositionY = ThreadLocalRandom.current().nextInt(0, n);
                 if(!cells[shipPositionY][shipPositionX].isOccupied){
                     ships[i] = new Ship(numberOfPassengers, shipPositionY, shipPositionX);
                     cells[shipPositionY][shipPositionX].isOccupied = true;
@@ -46,13 +46,13 @@ public class Grid {
             }
         }
 
-        int numberOfStations = ThreadLocalRandom.current().nextInt(1, (n*m/4) +1);
+        int numberOfStations = ThreadLocalRandom.current().nextInt(1, n*m +1);
         stations = new Station[numberOfStations];
 
         for (int i = 0; i < stations.length; i++) {
             while(true){
-                int stationPositionX = ThreadLocalRandom.current().nextInt(0, m+1);
-                int stationPositionY = ThreadLocalRandom.current().nextInt(0, n+1);
+                int stationPositionX = ThreadLocalRandom.current().nextInt(0, m);
+                int stationPositionY = ThreadLocalRandom.current().nextInt(0, n);
                 if(!cells[stationPositionY][stationPositionX].isOccupied){
                     stations[i] = new Station(stationPositionY, stationPositionX);
                     cells[stationPositionY][stationPositionX].isOccupied = true;

@@ -29,6 +29,7 @@ public class Agent {
         if (freeSpace >= ship.passengers){
             freeSpace -= ship.passengers;
             ship.passengers=0;
+            ship.isSunk=true;
         }
         else{
             ship.passengers -= freeSpace;
@@ -58,20 +59,43 @@ public class Agent {
                 blackBoxesRetrieved += 1;
                 ship.blackBoxDestroyed=true;
             }
+        }
     }
-}
 
 
     public void moveRight(){
-        
+        if(x == grid.m-1){
+            throw new Error("you can not move right");
+        }
+        else{
+            x++;
+        }
     }
+
     public void moveLeft(){
-        
+        if(x==0){
+            throw new Error("you can not move left");
+        }
+        else{
+            x--;
+        }
     }
+
     public void moveUp(){
-        
+        if(y==0){
+            throw new Error("you can not move up");
+        }
+        else{
+            y--;
+        }
     }
+
     public void moveDown(){
-        
+        if(y== grid.n-1){
+            throw new Error("you can not move down");
+        }
+        else{
+            y++;
+        }
     }
 }
