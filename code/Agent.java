@@ -102,7 +102,7 @@ public class Agent implements Cloneable {
         // creating a new state to pickup passengers
         // System.out.println("added pickup state");
         State clonedState = (State) currentState.clone();
-        State newState = new State(clonedState.grid.cells[y][x], clonedState.exploredStates, clonedState.grid,
+        State newState = new State(clonedState.grid.cells[y][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "pickup,", "pickup", clonedState.exploredCells);
 
         return newState;
@@ -125,7 +125,7 @@ public class Agent implements Cloneable {
         // System.out.println("2nd clone");
 
         State clonedState = (State) currentState.clone();
-        State newState = new State(clonedState.grid.cells[y][x], clonedState.exploredStates, clonedState.grid,
+        State newState = new State(clonedState.grid.cells[y][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "drop,", "drop", clonedState.exploredCells);
 
         return newState;
@@ -146,7 +146,7 @@ public class Agent implements Cloneable {
 
         // System.out.println("3rd clone");
         State clonedState = (State) currentState.clone();
-        State newState = new State(clonedState.grid.cells[y][x], clonedState.exploredStates, clonedState.grid,
+        State newState = new State(clonedState.grid.cells[y][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "retrieve,", "retrieve", clonedState.exploredCells);
 
         return newState;
@@ -159,23 +159,14 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        // check if the cell need to be added to the explored cells
-        // Pair p = new Pair(y, x - 1);
-        // boolean addingNew = true;
-        // for (int i = 0; i < currentState.exploredCells.size(); i++) {
-        //     if (currentState.exploredCells.get(i).y == p.y && currentState.exploredCells.get(i).x == p.x) {
-        //         addingNew = false;
-        //         break;
-        //     }
-        // }
-        // if(addingNew){
-        //     currentState.exploredCells.add(p);
-        // }
-
+        if(currentState.depth>1 && currentState.stateType.equals("right")){
+            return null;
+        }
+        
         // creating a new state to move left
         // System.out.println("4th clone");
         State clonedState = (State) currentState.clone();
-        State newState = new State(clonedState.grid.cells[y][x - 1], clonedState.exploredStates, clonedState.grid,
+        State newState = new State(clonedState.grid.cells[y][x - 1], clonedState.grid,
                 clonedState, currentState.currentPlan + "left,", "left", clonedState.exploredCells);
 
         // check if i visited this state already
@@ -198,23 +189,14 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        // check if the cell need to be added to the explored cells
-        // Pair p = new Pair(y - 1, x);
-        // boolean addingNew = true;
-        // for (int i = 0; i < currentState.exploredCells.size(); i++) {
-        //     if (currentState.exploredCells.get(i).y == p.y && currentState.exploredCells.get(i).x == p.x) {
-        //         addingNew = false;
-        //         break;
-        //     }
-        // }
-        // if(addingNew){
-        //     currentState.exploredCells.add(p);
-        // }
+        if(currentState.depth>1 && currentState.stateType.equals("down")){
+            return null;
+        }
 
         // creating a new state to move up
         // System.out.println("5th clone");
         State clonedState = (State) currentState.clone();
-        State newState = new State(clonedState.grid.cells[y - 1][x], clonedState.exploredStates, clonedState.grid,
+        State newState = new State(clonedState.grid.cells[y - 1][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "up,", "up", clonedState.exploredCells);
 
         // check if i visited this state already
@@ -237,24 +219,15 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        // check if the cell need to be added to the explored cells
-        // Pair p = new Pair(y, x + 1);
-        // boolean addingNew = true;
-        // for (int i = 0; i < currentState.exploredCells.size(); i++) {
-        //     if (currentState.exploredCells.get(i).y == p.y && currentState.exploredCells.get(i).x == p.x) {
-        //         addingNew = false;
-        //         break;
-        //     }
-        // }
-        // if(addingNew){
-        //     currentState.exploredCells.add(p);
-        // }
+        if(currentState.depth>1 && currentState.stateType.equals("left")){
+            return null;
+        }
 
         // creating a new state to move right
         // System.out.println("6th clone");
         State clonedState = (State) currentState.clone();
 
-        State newState = new State(clonedState.grid.cells[y][x + 1], clonedState.exploredStates, clonedState.grid,
+        State newState = new State(clonedState.grid.cells[y][x + 1], clonedState.grid,
                 clonedState, currentState.currentPlan + "right,", "right", clonedState.exploredCells);
 
         // check if i visited this state already
@@ -276,24 +249,15 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        // check if the cell need to be added to the explored cells
-        // Pair p = new Pair(y + 1, x);
-        // boolean addingNew = true;
-        // for (int i = 0; i < currentState.exploredCells.size(); i++) {
-        //     if (currentState.exploredCells.get(i).y == p.y && currentState.exploredCells.get(i).x == p.x) {
-        //         addingNew = false;
-        //         break;
-        //     }
-        // }
-        // if(addingNew){
-        //     currentState.exploredCells.add(p);
-        // }
+        if(currentState.depth>1 && currentState.stateType.equals("up")){
+            return null;
+        }
 
         // creating a new state to move down
         // System.out.println("7th clone");
 
         State clonedState = (State) currentState.clone();
-        State newState = new State(clonedState.grid.cells[y + 1][x], clonedState.exploredStates, clonedState.grid,
+        State newState = new State(clonedState.grid.cells[y + 1][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "down,", "down", clonedState.exploredCells);
 
         // check if i visited this state already

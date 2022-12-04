@@ -6,12 +6,17 @@ import java.util.Set;
 
 public class State implements Cloneable {
     Cell currentCell;
-    Set<TrackRecord> exploredStates;
+    // Set<TrackRecord> exploredStates;
     ArrayList<Pair> exploredCells;
     Grid grid;
     State previousState;
     boolean isInitialState;
     String currentPlan;
+    String stateType;
+    // int passengers;
+    int depth;
+    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -19,7 +24,6 @@ public class State implements Cloneable {
         result = prime * result + ((currentCell == null) ? 0 : currentCell.hashCode());
         result = prime * result + ((exploredCells == null) ? 0 : exploredCells.hashCode());
         result = prime * result + ((grid == null) ? 0 : grid.hashCode());
-        result = prime * result + ((previousState == null) ? 0 : previousState.hashCode());
         result = prime * result + depth;
         return result;
     }
@@ -48,24 +52,14 @@ public class State implements Cloneable {
                 return false;
         } else if (!grid.equals(other.grid))
             return false;
-        if (previousState == null) {
-            if (other.previousState != null)
-                return false;
-        } else if (!previousState.equals(other.previousState))
-            return false;
         if (depth != other.depth)
             return false;
         return true;
     }
 
-    String stateType;
-    // int passengers;
-    int depth;
-    
-
     public State(){}
     
-    public State(Cell currentCell, Set<TrackRecord> exploredStates, Grid grid, State previousState, String currentPlan, 
+    public State(Cell currentCell, Grid grid, State previousState, String currentPlan, 
     String stateType, ArrayList<Pair> exploredCells, int depth){
 
         this.currentCell = currentCell;
@@ -74,19 +68,19 @@ public class State implements Cloneable {
         this.depth = depth;
         isInitialState= false;
         this.currentPlan = currentPlan;
-        this.exploredStates = exploredStates;
+        // this.exploredStates = exploredStates;
         this.stateType = stateType;
         this.exploredCells = exploredCells;
     }
 
-    public State(Cell currentCell, Set<TrackRecord> exploredStates, Grid grid, State previousState, String currentPlan,  String stateType, ArrayList<Pair> exploredCells){
+    public State(Cell currentCell, Grid grid, State previousState, String currentPlan,  String stateType, ArrayList<Pair> exploredCells){
         this.currentCell = currentCell;
         this.grid= grid;
         this.previousState = previousState;
         depth = previousState.depth+1;
         isInitialState= false;
         this.currentPlan = currentPlan;
-        this.exploredStates = exploredStates;
+        // this.exploredStates = exploredStates;
         this.stateType = stateType;
         this.exploredCells = exploredCells;
     }
@@ -98,7 +92,7 @@ public class State implements Cloneable {
         depth = previousState.depth+1;
         isInitialState= false;
         this.currentPlan = currentPlan;
-        this.exploredStates = new HashSet<TrackRecord>();
+        // this.exploredStates = new HashSet<TrackRecord>();
     }
 
     public State(Cell currentCell, Grid grid){
@@ -106,12 +100,12 @@ public class State implements Cloneable {
         this.grid= grid;
         isInitialState=true;
         currentPlan="";
-        this.exploredStates = new HashSet<TrackRecord>();
+        // this.exploredStates = new HashSet<TrackRecord>();
     }
 
     public State clone() throws CloneNotSupportedException{
 
-        State clonedState = new State(currentCell, exploredStates, grid, previousState, currentPlan, stateType, exploredCells, depth);
+        State clonedState = new State(currentCell, grid, previousState, currentPlan, stateType, exploredCells, depth);
 
         clonedState.grid = clonedState.grid.clone();
 
@@ -120,12 +114,12 @@ public class State implements Cloneable {
             clonedExpCells.add(exploredCells.get(index).clone());
         }
 
-        HashSet<TrackRecord> clonedExpStates = new HashSet<TrackRecord>();
-        Iterator<TrackRecord> it = clonedState.exploredStates.iterator();
+        // HashSet<TrackRecord> clonedExpStates = new HashSet<TrackRecord>();
+        // Iterator<TrackRecord> it = clonedState.exploredStates.iterator();
 
-        while(it.hasNext()){
-            clonedExpStates.add(it.next().clone());
-        }
+        // while(it.hasNext()){
+        //     clonedExpStates.add(it.next().clone());
+        // }
         // clonedState.exploredStates = clonedExpStates;
 
         clonedState.exploredCells = clonedExpCells;

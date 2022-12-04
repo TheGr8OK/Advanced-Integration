@@ -27,49 +27,7 @@ public class Grid implements Cloneable {
     // this.stations = g.stations;
     // }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + m;
-        result = prime * result + n;
-        result = prime * result + deaths;
-        result = prime * result + alivePassengers;
-        result = prime * result + saved;
-        result = prime * result + Arrays.deepHashCode(cells);
-        result = prime * result + ((agent == null) ? 0 : agent.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Grid other = (Grid) obj;
-        if (m != other.m)
-            return false;
-        if (n != other.n)
-            return false;
-        if (deaths != other.deaths)
-            return false;
-        if (alivePassengers != other.alivePassengers)
-            return false;
-        if (saved != other.saved)
-            return false;
-        if (!Arrays.deepEquals(cells, other.cells))
-            return false;
-        if (agent == null) {
-            if (other.agent != null)
-                return false;
-        } else if (!agent.equals(other.agent))
-            return false;
-        return true;
-    }
-
+   
     public Grid(int m, int n, int deaths, Agent agent, Station[] stations, int alivePassengers, Cell[][] cells,
             Ship[] ships, int saved) {
         this.m = m;
@@ -83,11 +41,42 @@ public class Grid implements Cloneable {
         this.saved = saved;
     }
 
-    public Grid(int m, int n, Agent agent, Station[] stations, int alivePassengers) {
+   
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + saved;
+        result = prime * result + ((agent == null) ? 0 : agent.hashCode());
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Grid other = (Grid) obj;
+        if (saved != other.saved)
+            return false;
+        if (agent == null) {
+            if (other.agent != null)
+                return false;
+        } else if (!agent.equals(other.agent))
+            return false;
+        return true;
+    }
+
+
+    public Grid(int m, int n, Agent agent, Station[] stations, Ship[] ships, int alivePassengers) {
         this.m = m;
         this.n = n;
         this.agent = agent;
-        // this.ships = ships;
+        this.ships = ships;
         this.stations = stations;
         this.alivePassengers = alivePassengers;
 

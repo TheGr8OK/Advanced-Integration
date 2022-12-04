@@ -9,6 +9,8 @@ public class TrackRecord implements Cloneable {
     int dead;
     int saved;
     int blackBoxes;
+    Ship[] ships;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -67,9 +69,10 @@ public class TrackRecord implements Cloneable {
         blackBoxes = currState.grid.agent.blackBoxesRetrieved;
         nodes = currState.exploredCells.size();
         depth = currState.depth;
+        ships = currState.grid.ships;
     }
 
-    public TrackRecord(Pair p, int a, int o, int b, int d, int s, int depth, int nodes) {
+    public TrackRecord(Pair p, int a, int o, int b, int d, int s, int depth, int nodes, Ship[] ships) {
         currCell = p;
         onBoard = o;
         blackBoxes = b;
@@ -78,6 +81,7 @@ public class TrackRecord implements Cloneable {
         dead = d;
         this.depth =depth;
         this.nodes =nodes;
+        this.ships = ships;
     }
 
     public TrackRecord clone() throws CloneNotSupportedException {
