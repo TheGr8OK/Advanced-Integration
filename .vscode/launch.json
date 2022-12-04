@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch testing",
+            "request": "launch",
+            "mainClass": "code.testing",
+            "projectName": "Advanced-Integration_3d089889"
+        },
+        {
+            "type": "java",
+            "name": "Launch OldCoastGuard",
+            "request": "launch",
+            "mainClass": "code.OldCoastGuard",
+            "projectName": "Advanced-Integration_3d089889"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch CoastGuard",
+            "request": "launch",
+            "mainClass": "code.CoastGuard",
+            "projectName": "Advanced-Integration_3d089889"
+        }
+    ]
+}
