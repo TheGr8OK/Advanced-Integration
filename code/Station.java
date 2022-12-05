@@ -1,11 +1,11 @@
 package code;
 public class Station implements Cloneable {
     int passengersSaved;
-    int y;
-    int x;
+    byte y;
+    byte x;
 
 
-    public Station(int y, int x) {
+    public Station(byte y, byte x) {
         passengersSaved = 0;
         this.y=y;
         this.x=x;

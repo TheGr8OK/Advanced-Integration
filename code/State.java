@@ -1,8 +1,8 @@
 package code;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+// import java.util.HashSet;
+// import java.util.Iterator;
+// import java.util.Set;
 
 public class State implements Cloneable {
     Cell currentCell;
@@ -10,7 +10,6 @@ public class State implements Cloneable {
     ArrayList<Pair> exploredCells;
     Grid grid;
     State previousState;
-    boolean isInitialState;
     String currentPlan;
     String stateType;
     // int passengers;
@@ -21,10 +20,10 @@ public class State implements Cloneable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((currentCell == null) ? 0 : currentCell.hashCode());
-        result = prime * result + ((exploredCells == null) ? 0 : exploredCells.hashCode());
+        // result = prime * result + ((currentCell == null) ? 0 : currentCell.hashCode());
+        // result = prime * result + ((exploredCells == null) ? 0 : exploredCells.hashCode());
         result = prime * result + ((grid == null) ? 0 : grid.hashCode());
-        result = prime * result + depth;
+        // result = prime * result + depth;
         return result;
     }
 
@@ -37,27 +36,27 @@ public class State implements Cloneable {
         if (getClass() != obj.getClass())
             return false;
         State other = (State) obj;
-        if (currentCell == null) {
-            if (other.currentCell != null)
-                return false;
-        } else if (!currentCell.equals(other.currentCell))
-            return false;
-        if (exploredCells == null) {
-            if (other.exploredCells != null)
-                return false;
-        } else if (!exploredCells.equals(other.exploredCells))
-            return false;
+        // if (currentCell == null) {
+        //     if (other.currentCell != null)
+        //         return false;
+        // } else if (!currentCell.equals(other.currentCell))
+        //     return false;
+        // if (exploredCells == null) {
+        //     if (other.exploredCells != null)
+        //         return false;
+        // } else if (!exploredCells.equals(other.exploredCells))
+        //     return false;
         if (grid == null) {
             if (other.grid != null)
                 return false;
         } else if (!grid.equals(other.grid))
             return false;
-        if (depth != other.depth)
-            return false;
+        // if (depth != other.depth)
+        //     return false;
         return true;
     }
 
-    public State(){}
+    // public State(){}
     
     public State(Cell currentCell, Grid grid, State previousState, String currentPlan, 
     String stateType, ArrayList<Pair> exploredCells, int depth){
@@ -66,7 +65,6 @@ public class State implements Cloneable {
         this.grid= grid;
         this.previousState = previousState;
         this.depth = depth;
-        isInitialState= false;
         this.currentPlan = currentPlan;
         // this.exploredStates = exploredStates;
         this.stateType = stateType;
@@ -78,30 +76,26 @@ public class State implements Cloneable {
         this.grid= grid;
         this.previousState = previousState;
         depth = previousState.depth+1;
-        isInitialState= false;
         this.currentPlan = currentPlan;
         // this.exploredStates = exploredStates;
         this.stateType = stateType;
         this.exploredCells = exploredCells;
     }
 
-    public State(Cell currentCell, Grid grid, State previousState, String currentPlan){
-        this.currentCell = currentCell;
-        this.grid= grid;
-        this.previousState = previousState;
-        depth = previousState.depth+1;
-        isInitialState= false;
-        this.currentPlan = currentPlan;
-        // this.exploredStates = new HashSet<TrackRecord>();
-    }
+    // public State(Cell currentCell, Grid grid, State previousState, String currentPlan){
+    //     this.currentCell = currentCell;
+    //     this.grid= grid;
+    //     this.previousState = previousState;
+    //     depth = previousState.depth+1;
+    //     this.currentPlan = currentPlan;
+    //     // this.exploredStates = new HashSet<TrackRecord>();
+    // }
 
-    public State(Cell currentCell, Grid grid){
-        this.currentCell = currentCell;
-        this.grid= grid;
-        isInitialState=true;
-        currentPlan="";
-        // this.exploredStates = new HashSet<TrackRecord>();
-    }
+    // public State(Cell currentCell, Grid grid){
+    //     this.currentCell = currentCell;
+    //     this.grid= grid;
+    //     currentPlan="";
+    // }
 
     public State clone() throws CloneNotSupportedException{
 

@@ -1,10 +1,10 @@
 package code;
 
 public class Pair implements Cloneable{
-    int y;
-    int x;
+    byte y;
+    byte x;
 
-    public Pair(int y, int x){
+    public Pair(byte y, byte x){
         this.y=y;
         this.x =x;
     }

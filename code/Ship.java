@@ -1,8 +1,8 @@
 package code;
 public class Ship implements Cloneable {
-    int passengers;
+    byte passengers;
     // int dead;
-    int blackBoxDamage;
+    byte blackBoxDamage;
     boolean blackBoxDestroyed;
     boolean isSunk;
     @Override
@@ -43,11 +43,11 @@ public class Ship implements Cloneable {
     }
 
     // Grid grid;
-    int y;
-    int x;
+    byte y;
+    byte x;
 
 
-    public Ship(int passengers, int blackBoxDamage, boolean isSunk, boolean blackBoxDestroyed, int y, int x){
+    public Ship(byte passengers, byte blackBoxDamage, boolean isSunk, boolean blackBoxDestroyed, byte y, byte x){
         this.passengers = passengers;
         this.blackBoxDamage = blackBoxDamage;
         this.isSunk = isSunk;
@@ -56,7 +56,7 @@ public class Ship implements Cloneable {
         this.x=x;
     } 
     
-    public Ship(int passengers, int y, int x){
+    public Ship(byte passengers, byte y, byte x){
         blackBoxDamage = 0; // check public test 0 or 1
         this.passengers = passengers;
         isSunk = false;

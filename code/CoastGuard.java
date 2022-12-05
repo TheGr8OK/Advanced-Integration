@@ -5,7 +5,7 @@ import java.util.HashSet;
 // import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Set;
+// import java.util.Set;
 import java.util.Stack;
 
 public class CoastGuard {
@@ -40,15 +40,15 @@ public class CoastGuard {
         String[] gridParts = stringGrid.split(";");
 
         String[] gridSize = gridParts[0].split(",");
-        int m = Integer.parseInt(gridSize[0]);
-        int n = Integer.parseInt(gridSize[1]);
+        byte m = Byte.parseByte(gridSize[0]);
+        byte n = Byte.parseByte(gridSize[1]);
 
-        int agentCapacity = Integer.parseInt(gridParts[1]);
+        byte agentCapacity = Byte.parseByte(gridParts[1]);
         // System.out.println(agentCapacity + "Akhryyyy");
 
         String[] agentPosition = gridParts[2].split(",");
-        int agentX = Integer.parseInt(agentPosition[1]);
-        int agentY = Integer.parseInt(agentPosition[0]);
+        byte agentX = Byte.parseByte(agentPosition[1]);
+        byte agentY = Byte.parseByte(agentPosition[0]);
         Agent agent = new Agent(agentCapacity, agentY, agentX);
 
         String[] stringStations = gridParts[3].split(",");
@@ -59,14 +59,14 @@ public class CoastGuard {
 
         for (int i = 0; i < stringShips.length; i += 3) {
             // System.out.println("Ship " + (i + 1) / 3);
-            ships[(i + 1) / 3] = new Ship(Integer.parseInt(stringShips[i + 2]), Integer.parseInt(stringShips[i]),
-                    Integer.parseInt(stringShips[i + 1]));
+            ships[(i + 1) / 3] = new Ship(Byte.parseByte(stringShips[i + 2]), Byte.parseByte(stringShips[i]),
+                    Byte.parseByte(stringShips[i + 1]));
             alivePassengers += Integer.parseInt(stringShips[i + 2]);
         }
 
         for (int i = 0; i < stringStations.length; i += 2) {
-            stations[(i + 1) / 2] = new Station(Integer.parseInt(stringStations[i]),
-                    Integer.parseInt(stringStations[i + 1]));
+            stations[(i + 1) / 2] = new Station(Byte.parseByte(stringStations[i]),
+                    Byte.parseByte(stringStations[i + 1]));
         }
 
         // System.out.println("Ships: " + ships.length);
@@ -99,9 +99,9 @@ public class CoastGuard {
         if (strategy.equals("DF")) {
             output = SolveDF(grid);
         }
-        // if (strategy.equals("ID")) {
-        // output = SolveID(grid);
-        // }
+        if (strategy.equals("ID")) {
+            output = SolveID(grid);
+        }
         // if (strategy.equals("GR1")) {
         // output = SolveGR(1, grid);
         // }
@@ -116,6 +116,187 @@ public class CoastGuard {
         // }
         // System.out.println(output+" out");
         return output;
+    }
+
+    private static String SolveID(Grid grid) throws CloneNotSupportedException {
+
+        for (int i = 0;; i++) {
+            HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
+            Stack<State> stack = new Stack<State>();
+            ArrayList<Pair> exploredCells = new ArrayList<Pair>();
+
+            // adding the initial cell to the exploredCells
+            exploredCells.add(new Pair(grid.agent.y, grid.agent.x));
+
+            // Initial State of my problem
+            State initialState = new State(grid.cells[grid.agent.y][grid.agent.x],
+                    grid, null, "", "start", exploredCells, 0);
+
+            // adding the initial state to my queue
+            stack.push(initialState);
+
+            int counter = 0;
+            // int depth = 1000;
+
+            while (!stack.isEmpty()) {
+
+                // retrieving my current state from the queue
+                State currentState = stack.pop();
+                byte x = currentState.currentCell.positionX;
+                byte y = currentState.currentCell.positionY;
+
+                if (currentState.depth > i) {
+                    continue;
+                }
+
+                // check if current state is a goal state
+                if (isBreak(currentState)) {
+                    String plan = currentState.currentPlan.substring(0, currentState.currentPlan.length() - 1);
+                    String deaths = currentState.grid.deaths + "";
+                    String retrieved = currentState.grid.agent.blackBoxesRetrieved + "";
+                    String nodes = currentState.exploredCells.size() + "";
+
+                    return plan + ";" + deaths + ";" + retrieved + ";" + nodes;
+                    // depth = currentState.depth;
+                }
+
+                if (counter > 1000000000) {
+                    break;
+                }
+
+                // System.out.println("(" + y + "," + x + ")");
+                TrackRecord isNew = new TrackRecord(new Pair(y, x), 
+                        currentState.grid.agent.passengers,
+                        currentState.grid.agent.blackBoxesRetrieved, currentState.grid.deaths,
+                        currentState.depth,
+                        currentState.exploredCells.size(), currentState.grid.ships);
+                if (currentState.depth > 0 && !exploredStates.add(isNew)) {
+                    // System.out.println("I AM PASSING!!!! " + currentState.currentPlan);
+                    continue;
+                }
+
+                currentState.grid.agent.y = y;
+                currentState.grid.agent.x = x;
+
+                Pair p = new Pair(y, x);
+                boolean addingNew = true;
+                for (int i1 = 0; i1 < currentState.exploredCells.size(); i1++) {
+                    if (currentState.exploredCells.get(i1).y == p.y && currentState.exploredCells.get(i1).x == p.x) {
+                        addingNew = false;
+                        break;
+                    }
+                }
+                if (addingNew) {
+                    currentState.exploredCells.add(p);
+                }
+
+                // perform the action coming on queue
+                switch (currentState.stateType) {
+                    case "pickup":
+                        // check if the ship still has passengers
+                        if (currentState.grid.cells[y][x].ship.passengers > 0) {
+                            currentState.grid.agent.pickUpPassengers(currentState, y, x);
+                        }
+
+                        break;
+
+                    case "retrieve":
+                        currentState.grid.agent.retrieveBlackBox(currentState);
+                        currentState.grid.cells[y][x].ship.blackBoxDestroyed = true;
+
+                        break;
+
+                    case "drop":
+                        currentState.grid.agent.dropPassengers(currentState);
+
+                        break;
+
+                    default:
+                        break;
+                }
+
+                // timestep
+                if (!(currentState.depth == 0)) {
+                    currentState.grid.timeStep();
+                }
+                // check if the current cell is a station
+                if (currentState.grid.cells[y][x].isOccupied
+                        && !currentState.grid.cells[y][x].isShip) {
+                    State newState = currentState.grid.agent.isDropPassengers(currentState);
+                    if (newState != null) {
+                        stack.push(newState);
+                    }
+                }
+
+                // check if the current cell is a ship
+                if (currentState.grid.cells[y][x].isOccupied && currentState.grid.cells[y][x].isShip) {
+                    Ship ship = currentState.grid.cells[y][x].ship;
+
+                    // check if i can pickup passengers
+                    if (!ship.isSunk) {
+                        State newState = currentState.grid.agent.isPickUpPassengers(currentState);
+                        if (newState != null) {
+                            stack.push(newState);
+                        }
+                    } else {
+                        // check if black box is retrievable
+                        if (!ship.blackBoxDestroyed) {
+                            State newState = currentState.grid.agent.isRetrieveBlackBox(currentState);
+                            if (newState != null) {
+                                stack.push(newState);
+                            }
+                        }
+                    }
+                }
+
+                // adding the 4 movement directions
+                // check if I can move Left
+                State leftState = currentState.grid.agent.isMoveLeft(currentState);
+                if (leftState != null) {
+                    stack.push(leftState);
+                }
+
+                // check if I can move Up
+                State upState = currentState.grid.agent.isMoveUp(currentState);
+                if (upState != null) {
+                    stack.push(upState);
+                }
+
+                // check if I can move Right
+                State rightState = currentState.grid.agent.isMoveRight(currentState);
+                if (rightState != null) {
+                    stack.push(rightState);
+                }
+
+                // check if I can move Down
+                State downState = currentState.grid.agent.isMoveDown(currentState);
+                if (downState != null) {
+                    stack.push(downState);
+                }
+
+                // System.out.println("Black boxes retrievd: " +
+                // currentState.grid.agent.blackBoxesRetrieved);
+                // System.out.println("Depth: " + currentState.depth);
+                // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
+                // System.out.println("Ship Passengers: " +
+                // currentState.grid.cells[3][2].ship.passengers);
+                // System.out.println(
+                // "BlackBox Destroyed: " +
+                // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
+                // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
+
+                // System.out.println(currentState.currentPlan);
+
+                counter++;
+                // System.out.println("Explored: "+ currentState.exploredCells.size());
+
+                // check if I reached a goal state and will I break
+
+            }
+        }
+
+        // return "No way I reach this!!!";
+
     }
 
     private static String SolveDF(Grid grid) throws CloneNotSupportedException {
@@ -141,13 +322,13 @@ public class CoastGuard {
 
             // retrieving my current state from the queue
             State currentState = stack.pop();
-            int x = currentState.currentCell.positionX;
-            int y = currentState.currentCell.positionY;
+            byte x = currentState.currentCell.positionX;
+            byte y = currentState.currentCell.positionY;
 
-            System.out.println("("+y+","+x +")");
-            TrackRecord isNew = new TrackRecord(new Pair(y, x), currentState.grid.alivePassengers,
+            System.out.println("(" + y + "," + x + ")");
+            TrackRecord isNew = new TrackRecord(new Pair(y, x), 
                     currentState.grid.agent.passengers,
-                    currentState.grid.agent.blackBoxesRetrieved, currentState.grid.deaths, currentState.grid.saved,
+                    currentState.grid.agent.blackBoxesRetrieved, currentState.grid.deaths,
                     currentState.depth,
                     currentState.exploredCells.size(), currentState.grid.ships);
             if (currentState.depth > 0 && !exploredStates.add(isNew)) {
@@ -300,8 +481,6 @@ public class CoastGuard {
         }
     }
 
-
-
     private static String SolveBF(Grid grid) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         Queue<State> queue = new LinkedList<>();
@@ -317,20 +496,20 @@ public class CoastGuard {
         // adding the initial state to my queue
         queue.add(initialState);
 
-        int counter = 0;
-        int depth = 1000;
-        ArrayList<State> goals = new ArrayList<State>();
+        // int counter = 0;
+        // int depth = 1000;
+        // State goal;
 
-        while (!queue.isEmpty() && queue.peek().depth <= depth) {
+        while (!queue.isEmpty()) {
 
             // retrieving my current state from the queue
             State currentState = queue.remove();
-            int x = currentState.currentCell.positionX;
-            int y = currentState.currentCell.positionY;
+            byte x = currentState.currentCell.positionX;
+            byte y = currentState.currentCell.positionY;
 
-            TrackRecord isNew = new TrackRecord(new Pair(y, x), currentState.grid.alivePassengers,
+            TrackRecord isNew = new TrackRecord(new Pair(y, x),
                     currentState.grid.agent.passengers,
-                    currentState.grid.agent.blackBoxesRetrieved, currentState.grid.deaths, currentState.grid.saved,
+                    currentState.grid.agent.blackBoxesRetrieved, currentState.grid.deaths,
                     currentState.depth,
                     currentState.exploredCells.size(), currentState.grid.ships);
             if (currentState.depth > 0 && !exploredStates.add(isNew)) {
@@ -439,7 +618,7 @@ public class CoastGuard {
 
             // System.out.println("Black boxes retrievd: " +
             // currentState.grid.agent.blackBoxesRetrieved);
-            System.out.println("Depth: " + currentState.depth);
+            // System.out.println("Depth: " + currentState.depth);
             // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
             // System.out.println("Ship Passengers: " +
             // currentState.grid.cells[3][2].ship.passengers);
@@ -450,37 +629,26 @@ public class CoastGuard {
 
             // System.out.println(currentState.currentPlan);
 
-            counter++;
+            // counter++;
             // System.out.println("Explored: "+ currentState.exploredCells.size());
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
-                goals.add(currentState);
-                depth = currentState.depth;
+                String plan = currentState.currentPlan.substring(0, currentState.currentPlan.length() - 1);
+                String deaths = currentState.grid.deaths + "";
+                String retrieved = currentState.grid.agent.blackBoxesRetrieved + "";
+                String nodes = currentState.exploredCells.size() + "";
+
+                return plan + ";" + deaths + ";" + retrieved + ";" + nodes;
             }
 
-            if (counter > 1000000) {
-                break;
-            }
+            // if (counter > 10000000) {
+            // break;
+            // }
         }
 
-        if (goals.size() > 0) {
-            State min = goals.get(0);
-            for (int i = 1; i < goals.size(); i++) {
-                if (goals.get(i).exploredCells.size() < min.exploredCells.size()) {
-                    min = goals.get(i);
-                }
-            }
+        return "No way I reach this!!!";
 
-            String plan = min.currentPlan.substring(0, min.currentPlan.length() - 1);
-            String deaths = min.grid.deaths + "";
-            String retrieved = min.grid.agent.blackBoxesRetrieved + "";
-            String nodes = min.exploredCells.size() + "";
-
-            return plan + ";" + deaths + ";" + retrieved + ";" + nodes;
-        } else {
-            return "No way I reach this!!!";
-        }
     }
 
     private static boolean isBreak(State currentState) {
@@ -505,31 +673,33 @@ public class CoastGuard {
         return isBreak;
     }
 
-    public static boolean check(TrackRecord comingPair, Set<TrackRecord> exploredStates, State cState) {
-        // if(cState.currentPlan.equals("down,down,pickup,retrieve,up,")){
-        // System.out.println("The Record: "+ comingPair.currCell.y + " "+
-        // comingPair.currCell.x+ " "+ comingPair.alive+ " "+ comingPair.onBoard + "
-        // "+comingPair.dead+ " "+comingPair.saved);
-        // for(TrackRecord a:exploredStates){
-        // System.out.println(a.currCell.y+ " "+ a.currCell.x+ " "+ a.alive+"
-        // "+a.onBoard + " "+ a.dead + " "+ a.saved);
-        // }
-        // }
-        boolean result = false;
-        for (TrackRecord a : exploredStates) {
-            if (a.currCell.y == comingPair.currCell.y && a.currCell.x == comingPair.currCell.x
-                    && a.alive == comingPair.alive && a.onBoard == comingPair.onBoard
-                    && a.blackBoxes == comingPair.blackBoxes
-                    && a.dead == comingPair.dead && a.saved == comingPair.saved) {
+    // public static boolean check(TrackRecord comingPair, Set<TrackRecord>
+    // exploredStates, State cState) {
+    // // if(cState.currentPlan.equals("down,down,pickup,retrieve,up,")){
+    // // System.out.println("The Record: "+ comingPair.currCell.y + " "+
+    // // comingPair.currCell.x+ " "+ comingPair.alive+ " "+ comingPair.onBoard + "
+    // // "+comingPair.dead+ " "+comingPair.saved);
+    // // for(TrackRecord a:exploredStates){
+    // // System.out.println(a.currCell.y+ " "+ a.currCell.x+ " "+ a.alive+"
+    // // "+a.onBoard + " "+ a.dead + " "+ a.saved);
+    // // }
+    // // }
+    // boolean result = false;
+    // for (TrackRecord a : exploredStates) {
+    // if (a.currCell.y == comingPair.currCell.y && a.currCell.x ==
+    // comingPair.currCell.x
+    // && a.alive == comingPair.alive && a.onBoard == comingPair.onBoard
+    // && a.blackBoxes == comingPair.blackBoxes
+    // && a.dead == comingPair.dead && a.saved == comingPair.saved) {
 
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
+    // result = true;
+    // break;
+    // }
+    // }
+    // return result;
+    // }
 
     public static void main(String[] args) throws CloneNotSupportedException {
-        System.out.println(solve("3,4;97;1,2;0,1;3,2,65;", "BF", false));
+        System.out.println(solve("3,4;97;1,2;0,1;3,2,65;", "ID", false));
     }
 }

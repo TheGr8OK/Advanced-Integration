@@ -1,25 +1,25 @@
 package code;
 
 public class Cell implements Cloneable {
-    int positionX;
-    int positionY;
+    byte positionX;
+    byte positionY;
     boolean isOccupied;
     // boolean isExplored;
-    Cell parentCell;
+    // Cell parentCell;
     Ship ship;
     Station station;
     boolean isShip;
-    boolean isStation;
+    // boolean isStation;
 
-    public Cell(int x, int y, boolean isOccupied, Cell parent, Ship s, Station st, boolean isS, boolean isSt){
+    public Cell(byte x, byte y, boolean isOccupied, Ship s, Station st, boolean isS){
         positionX = x;
         positionY= y;
         this.isOccupied = isOccupied;
-        parentCell = parent;
+        // parentCell = parent;
         ship = s;
         station = st;
         isShip = isS;
-        isStation = isSt;
+        // isStation = isSt;
     }
 
     @Override
@@ -32,7 +32,6 @@ public class Cell implements Cloneable {
         result = prime * result + ((ship == null) ? 0 : ship.hashCode());
         result = prime * result + ((station == null) ? 0 : station.hashCode());
         result = prime * result + (isShip ? 1231 : 1237);
-        result = prime * result + (isStation ? 1231 : 1237);
         return result;
     }
 
@@ -63,41 +62,40 @@ public class Cell implements Cloneable {
             return false;
         if (isShip != other.isShip)
             return false;
-        if (isStation != other.isStation)
-            return false;
+       
         return true;
     }
 
-    public Cell(int y, int x) {
+    public Cell(byte y, byte x) {
         positionX = x;
         positionY = y;
         isOccupied = false;
     }
 
-    public Cell(int y, int x, Ship ship) {
+    public Cell(byte y, byte x, Ship ship) {
         positionX = x;
         positionY = y;
         isOccupied = true;
         isShip =true;
         this.ship =ship;
     }
-    public Cell(int y, int x, Station station) {
+    public Cell(byte y, byte x, Station station) {
         positionX = x;
         positionY = y;
         isOccupied = true;
-        isStation = true;
         this.station = station;
+        isShip=false;
     }
 
     public Cell clone() throws CloneNotSupportedException {
 
-        Cell clonedCell = new Cell(positionX, positionY, isOccupied, parentCell, ship, station, isShip, isStation);
+        Cell clonedCell = new Cell(positionX, positionY, isOccupied, ship, station, isShip);
 
         if (clonedCell.isShip) {
             clonedCell = new Cell(clonedCell.positionY, clonedCell.positionX, clonedCell.ship.clone());
 
         } else {
-            if (clonedCell.isOccupied && clonedCell.isStation) 
+            if (clonedCell.isOccupied && !clonedCell.isShip) 
                 clonedCell.station = new Station(clonedCell.station.y, clonedCell.station.x);
         }
 

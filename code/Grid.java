@@ -1,14 +1,14 @@
 package code;
 
-import java.util.Arrays;
+// import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Grid implements Cloneable {
-    int m;
-    int n;
+    byte m;
+    byte n;
     int deaths;
     int alivePassengers;
-    int saved;
+    // int saved;
     Cell[][] cells;
     Agent agent;
     Ship[] ships;
@@ -28,8 +28,8 @@ public class Grid implements Cloneable {
     // }
 
    
-    public Grid(int m, int n, int deaths, Agent agent, Station[] stations, int alivePassengers, Cell[][] cells,
-            Ship[] ships, int saved) {
+    public Grid(byte m, byte n, int deaths, Agent agent, Station[] stations, int alivePassengers, Cell[][] cells,
+            Ship[] ships) {
         this.m = m;
         this.n = n;
         this.agent = agent;
@@ -38,7 +38,7 @@ public class Grid implements Cloneable {
         this.alivePassengers = alivePassengers;
         this.deaths = deaths;
         this.cells = cells;
-        this.saved = saved;
+        // this.saved = saved;
     }
 
    
@@ -46,7 +46,7 @@ public class Grid implements Cloneable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + saved;
+        // result = prime * result + saved;
         result = prime * result + ((agent == null) ? 0 : agent.hashCode());
         return result;
     }
@@ -61,8 +61,8 @@ public class Grid implements Cloneable {
         if (getClass() != obj.getClass())
             return false;
         Grid other = (Grid) obj;
-        if (saved != other.saved)
-            return false;
+        // if (saved != other.saved)
+        //     return false;
         if (agent == null) {
             if (other.agent != null)
                 return false;
@@ -72,7 +72,7 @@ public class Grid implements Cloneable {
     }
 
 
-    public Grid(int m, int n, Agent agent, Station[] stations, Ship[] ships, int alivePassengers) {
+    public Grid(byte m, byte n, Agent agent, Station[] stations, Ship[] ships, int alivePassengers) {
         this.m = m;
         this.n = n;
         this.agent = agent;
@@ -81,7 +81,7 @@ public class Grid implements Cloneable {
         this.alivePassengers = alivePassengers;
 
         deaths = 0;
-        saved =0;
+        // saved =0;
         // shipsPassengers = new int[n][m];
 
         // for (int i = 0; i < ships.length; i++) {
@@ -91,8 +91,8 @@ public class Grid implements Cloneable {
 
         cells = new Cell[n][m];
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+        for (byte i = 0; i < n; i++) {
+            for (byte j = 0; j < m; j++) {
                 cells[i][j] = new Cell(i, j);
             }
         }
@@ -100,23 +100,23 @@ public class Grid implements Cloneable {
 
     public Grid() throws CloneNotSupportedException {
         // no items in the same cell
-        m = ThreadLocalRandom.current().nextInt(5, 16);
-        n = ThreadLocalRandom.current().nextInt(5, 16);
+        m = (byte) ThreadLocalRandom.current().nextInt(5, 16);
+        n = (byte) ThreadLocalRandom.current().nextInt(5, 16);
 
         deaths = 0;
 
         cells = new Cell[n][m];
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+        for (byte i = 0; i < n; i++) {
+            for (byte j = 0; j < m; j++) {
                 cells[i][j] = new Cell(i, j);
             }
         }
 
         // genertae Agent position
-        int agentX = ThreadLocalRandom.current().nextInt(0, m);
-        int agentY = ThreadLocalRandom.current().nextInt(0, n);
-        int agentCapacity = ThreadLocalRandom.current().nextInt(30, 101);
+        byte agentX = (byte) ThreadLocalRandom.current().nextInt(0, m);
+        byte agentY = (byte) ThreadLocalRandom.current().nextInt(0, n);
+        byte agentCapacity = (byte) ThreadLocalRandom.current().nextInt(30, 101);
         agent = new Agent(agentCapacity, agentY, agentX, this);
         cells[agentY][agentX].isOccupied = true;
         // cells[agentY][agentX].occupant = agent;
@@ -126,10 +126,10 @@ public class Grid implements Cloneable {
 
         // generate ships on random locations
         for (int i = 0; i < numberOfShips; i++) {
-            int numberOfPassengers = ThreadLocalRandom.current().nextInt(1, 101);
+            byte numberOfPassengers = (byte) ThreadLocalRandom.current().nextInt(1, 101);
             while (true) {
-                int shipPositionX = ThreadLocalRandom.current().nextInt(0, m);
-                int shipPositionY = ThreadLocalRandom.current().nextInt(0, n);
+                byte shipPositionX = (byte) ThreadLocalRandom.current().nextInt(0, m);
+                byte shipPositionY = (byte) ThreadLocalRandom.current().nextInt(0, n);
                 if (!cells[shipPositionY][shipPositionX].isOccupied) {
                     cells[shipPositionY][shipPositionX].ship = new Ship(numberOfPassengers, shipPositionY,
                             shipPositionX);
@@ -145,8 +145,8 @@ public class Grid implements Cloneable {
 
         for (int i = 0; i < stations.length; i++) {
             while (true) {
-                int stationPositionX = ThreadLocalRandom.current().nextInt(0, m);
-                int stationPositionY = ThreadLocalRandom.current().nextInt(0, n);
+                byte stationPositionX = (byte) ThreadLocalRandom.current().nextInt(0, m);
+                byte stationPositionY = (byte) ThreadLocalRandom.current().nextInt(0, n);
                 if (!cells[stationPositionY][stationPositionX].isOccupied) {
                     stations[i] = new Station(stationPositionY, stationPositionX);
                     cells[stationPositionY][stationPositionX].isOccupied = true;
@@ -159,7 +159,7 @@ public class Grid implements Cloneable {
     }
 
     public Grid clone() throws CloneNotSupportedException {
-        Grid clonedGrid = new Grid(m, n, deaths, agent, stations, alivePassengers, cells, ships, saved);
+        Grid clonedGrid = new Grid(m, n, deaths, agent, stations, alivePassengers, cells, ships);
 
         Cell newCells[][] = new Cell[n][m];
         for (int i = 0; i < cells.length; i++) {

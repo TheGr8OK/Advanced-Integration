@@ -5,22 +5,22 @@ import java.lang.Math;
 
 public class Agent implements Cloneable {
     // Grid grid;
-    int freeSpace;
-    int passengers;
-    int x;
-    int y;
-    int capacity;
-    int blackBoxesRetrieved;
+    byte freeSpace;
+    byte passengers;
+    byte x;
+    byte y;
+    byte capacity;
+    byte blackBoxesRetrieved;
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + freeSpace;
+        // result = prime * result + freeSpace;
         result = prime * result + passengers;
         result = prime * result + x;
         result = prime * result + y;
-        result = prime * result + capacity;
+        // result = prime * result + capacity;
         result = prime * result + blackBoxesRetrieved;
         return result;
     }
@@ -34,16 +34,16 @@ public class Agent implements Cloneable {
         if (getClass() != obj.getClass())
             return false;
         Agent other = (Agent) obj;
-        if (freeSpace != other.freeSpace)
-            return false;
+        // if (freeSpace != other.freeSpace)
+        //     return false;
         if (passengers != other.passengers)
             return false;
         if (x != other.x)
             return false;
         if (y != other.y)
             return false;
-        if (capacity != other.capacity)
-            return false;
+        // if (capacity != other.capacity)
+        //     return false;
         if (blackBoxesRetrieved != other.blackBoxesRetrieved)
             return false;
         return true;
@@ -60,7 +60,7 @@ public class Agent implements Cloneable {
 
     }
 
-    public Agent(int capacity, int y, int x) {
+    public Agent(byte capacity, byte y, byte x) {
         this.freeSpace = capacity < 30 ? 30 : (capacity > 100) ? 100 : capacity;
         this.x = x;
         this.y = y;
@@ -69,7 +69,7 @@ public class Agent implements Cloneable {
         passengers = 0;
     }
 
-    public Agent(int capacity, int y, int x, Grid grid) {
+    public Agent(byte capacity, byte y, byte x, Grid grid) {
         this.freeSpace = capacity < 30 ? 30 : (capacity > 100) ? 100 : capacity;
         this.x = x;
         this.y = y;
@@ -295,11 +295,11 @@ public class Agent implements Cloneable {
 
     // do action drop passengers in station
     public void dropPassengers(State currentState) {
-        Station station = currentState.grid.cells[y][x].station;
+        // Station station = currentState.grid.cells[y][x].station;
 
         // System.out.println("I droped " + passengers + " passengers");
 
-        currentState.grid.saved += passengers;
+        // currentState.grid.saved += passengers;
         // currentState.grid.alivePassengers -= currentState.grid.agent.passengers;
         freeSpace = currentState.grid.agent.capacity;
         passengers = 0;
