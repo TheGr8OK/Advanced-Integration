@@ -95,36 +95,34 @@ public class CoastGuard {
 
         String output = "";
         if (strategy.equals("BF")) {
-            output = SolveBF(grid);
+            output = SolveBF(grid, visualize);
         }
         if (strategy.equals("DF")) {
-            output = SolveDF(grid);
+            output = SolveDF(grid, visualize);
         }
         if (strategy.equals("ID")) {
-            output = SolveID(grid);
+            output = SolveID(grid, visualize);
         }
-        if (strategy.equals("UC")){
-            output = SolveUC(grid);
+        if (strategy.equals("UC")) {
+            output = SolveUC(grid, visualize);
         }
         if (strategy.equals("GR1")) {
-        output = SolveGR1(grid);
+            output = SolveGR1(grid, visualize);
         }
         if (strategy.equals("GR2")) {
-        output = SolveGR2(grid);
+            output = SolveGR2(grid, visualize);
         }
         if (strategy.equals("AS1")) {
-        output = SolveAS1(grid);
+            output = SolveAS1(grid, visualize);
         }
         if (strategy.equals("AS2")) {
-        output = SolveAS2(grid);
+            output = SolveAS2(grid, visualize);
         }
         // System.out.println(output+" out");
         return output;
     }
 
-
-
-    private static String SolveAS1(Grid grid) throws CloneNotSupportedException {
+    private static String SolveAS1(Grid grid, boolean visualize) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         PriorityQueue<State> queue = new PriorityQueue<>(new A1Comparator());
         ArrayList<Pair> exploredCells = new ArrayList<Pair>();
@@ -134,7 +132,7 @@ public class CoastGuard {
 
         // Initial State of my problem
         State initialState = new State(grid.cells[grid.agent.y][grid.agent.x],
-                grid, null, "", "start", exploredCells, 0, new Cost(0,0));
+                grid, null, "", "start", exploredCells, 0, new Cost(0, 0));
 
         // adding the initial state to my queue
         queue.add(initialState);
@@ -259,21 +257,8 @@ public class CoastGuard {
                 queue.add(downState);
             }
 
-            // System.out.println("Black boxes retrievd: " +
-            // currentState.grid.agent.blackBoxesRetrieved);
-            // System.out.println("Depth: " + currentState.depth);
-            // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-            // System.out.println("Ship Passengers: " +
-            // currentState.grid.cells[3][2].ship.passengers);
-            // System.out.println(
-            // "BlackBox Destroyed: " +
-            // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-            // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-            // System.out.println(currentState.currentPlan);
-
-            // counter++;
-            // System.out.println("Explored: "+ currentState.exploredCells.size());
+            if (visualize)
+                System.out.println("Current Plan: " + currentState.currentPlan);
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
@@ -294,8 +279,7 @@ public class CoastGuard {
 
     }
 
-
-    private static String SolveAS2(Grid grid) throws CloneNotSupportedException {
+    private static String SolveAS2(Grid grid, boolean visualize) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         PriorityQueue<State> queue = new PriorityQueue<>(new A2Comparator());
         ArrayList<Pair> exploredCells = new ArrayList<Pair>();
@@ -305,7 +289,7 @@ public class CoastGuard {
 
         // Initial State of my problem
         State initialState = new State(grid.cells[grid.agent.y][grid.agent.x],
-                grid, null, "", "start", exploredCells, 0, new Cost(0,0));
+                grid, null, "", "start", exploredCells, 0, new Cost(0, 0));
 
         // adding the initial state to my queue
         queue.add(initialState);
@@ -430,21 +414,8 @@ public class CoastGuard {
                 queue.add(downState);
             }
 
-            // System.out.println("Black boxes retrievd: " +
-            // currentState.grid.agent.blackBoxesRetrieved);
-            // System.out.println("Depth: " + currentState.depth);
-            // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-            // System.out.println("Ship Passengers: " +
-            // currentState.grid.cells[3][2].ship.passengers);
-            // System.out.println(
-            // "BlackBox Destroyed: " +
-            // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-            // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-            // System.out.println(currentState.currentPlan);
-
-            // counter++;
-            // System.out.println("Explored: "+ currentState.exploredCells.size());
+            if (visualize)
+                System.out.println("Current Plan: " + currentState.currentPlan);
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
@@ -465,8 +436,7 @@ public class CoastGuard {
 
     }
 
-
-    private static String SolveGR1(Grid grid) throws CloneNotSupportedException {
+    private static String SolveGR1(Grid grid, boolean visualize) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         PriorityQueue<State> queue = new PriorityQueue<>(new H1Comparator());
         ArrayList<Pair> exploredCells = new ArrayList<Pair>();
@@ -476,7 +446,7 @@ public class CoastGuard {
 
         // Initial State of my problem
         State initialState = new State(grid.cells[grid.agent.y][grid.agent.x],
-                grid, null, "", "start", exploredCells, 0, new Cost(0,0));
+                grid, null, "", "start", exploredCells, 0, new Cost(0, 0));
 
         // adding the initial state to my queue
         queue.add(initialState);
@@ -601,21 +571,8 @@ public class CoastGuard {
                 queue.add(downState);
             }
 
-            // System.out.println("Black boxes retrievd: " +
-            // currentState.grid.agent.blackBoxesRetrieved);
-            // System.out.println("Depth: " + currentState.depth);
-            // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-            // System.out.println("Ship Passengers: " +
-            // currentState.grid.cells[3][2].ship.passengers);
-            // System.out.println(
-            // "BlackBox Destroyed: " +
-            // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-            // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-            // System.out.println(currentState.currentPlan);
-
-            // counter++;
-            // System.out.println("Explored: "+ currentState.exploredCells.size());
+            if (visualize)
+                System.out.println("Current Plan: " + currentState.currentPlan);
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
@@ -636,8 +593,7 @@ public class CoastGuard {
 
     }
 
-
-    private static String SolveGR2(Grid grid) throws CloneNotSupportedException {
+    private static String SolveGR2(Grid grid, boolean visualize) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         PriorityQueue<State> queue = new PriorityQueue<>(new H2Comparator());
         ArrayList<Pair> exploredCells = new ArrayList<Pair>();
@@ -647,7 +603,7 @@ public class CoastGuard {
 
         // Initial State of my problem
         State initialState = new State(grid.cells[grid.agent.y][grid.agent.x],
-                grid, null, "", "start", exploredCells, 0, new Cost(0,0));
+                grid, null, "", "start", exploredCells, 0, new Cost(0, 0));
 
         // adding the initial state to my queue
         queue.add(initialState);
@@ -772,21 +728,8 @@ public class CoastGuard {
                 queue.add(downState);
             }
 
-            // System.out.println("Black boxes retrievd: " +
-            // currentState.grid.agent.blackBoxesRetrieved);
-            // System.out.println("Depth: " + currentState.depth);
-            // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-            // System.out.println("Ship Passengers: " +
-            // currentState.grid.cells[3][2].ship.passengers);
-            // System.out.println(
-            // "BlackBox Destroyed: " +
-            // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-            // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-            // System.out.println(currentState.currentPlan);
-
-            // counter++;
-            // System.out.println("Explored: "+ currentState.exploredCells.size());
+            if (visualize)
+                System.out.println("Current Plan: " + currentState.currentPlan);
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
@@ -807,7 +750,7 @@ public class CoastGuard {
 
     }
 
-    private static String SolveUC(Grid grid) throws CloneNotSupportedException{
+    private static String SolveUC(Grid grid, boolean visualize) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         PriorityQueue<State> queue = new PriorityQueue<>(new CostComparator());
         ArrayList<Pair> exploredCells = new ArrayList<Pair>();
@@ -817,7 +760,7 @@ public class CoastGuard {
 
         // Initial State of my problem
         State initialState = new State(grid.cells[grid.agent.y][grid.agent.x],
-                grid, null, "", "start", exploredCells, 0, new Cost(0,0));
+                grid, null, "", "start", exploredCells, 0, new Cost(0, 0));
 
         // adding the initial state to my queue
         queue.add(initialState);
@@ -942,21 +885,8 @@ public class CoastGuard {
                 queue.add(downState);
             }
 
-            // System.out.println("Black boxes retrievd: " +
-            // currentState.grid.agent.blackBoxesRetrieved);
-            // System.out.println("Depth: " + currentState.depth);
-            // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-            // System.out.println("Ship Passengers: " +
-            // currentState.grid.cells[3][2].ship.passengers);
-            // System.out.println(
-            // "BlackBox Destroyed: " +
-            // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-            // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-            // System.out.println(currentState.currentPlan);
-
-            // counter++;
-            // System.out.println("Explored: "+ currentState.exploredCells.size());
+            if (visualize)
+                System.out.println("Current Plan: " + currentState.currentPlan);
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
@@ -977,7 +907,7 @@ public class CoastGuard {
 
     }
 
-    private static String SolveID(Grid grid) throws CloneNotSupportedException {
+    private static String SolveID(Grid grid, boolean visualize) throws CloneNotSupportedException {
 
         for (int i = 0;; i++) {
             HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
@@ -1024,7 +954,7 @@ public class CoastGuard {
                 }
 
                 // System.out.println("(" + y + "," + x + ")");
-                TrackRecord isNew = new TrackRecord(new Pair(y, x), 
+                TrackRecord isNew = new TrackRecord(new Pair(y, x),
                         currentState.grid.agent.passengers,
                         currentState.grid.agent.blackBoxesRetrieved, currentState.grid.deaths,
                         currentState.depth,
@@ -1133,32 +1063,14 @@ public class CoastGuard {
                     stack.push(downState);
                 }
 
-                // System.out.println("Black boxes retrievd: " +
-                // currentState.grid.agent.blackBoxesRetrieved);
-                // System.out.println("Depth: " + currentState.depth);
-                // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-                // System.out.println("Ship Passengers: " +
-                // currentState.grid.cells[3][2].ship.passengers);
-                // System.out.println(
-                // "BlackBox Destroyed: " +
-                // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-                // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-                // System.out.println(currentState.currentPlan);
-
-                counter++;
-                // System.out.println("Explored: "+ currentState.exploredCells.size());
-
-                // check if I reached a goal state and will I break
+                if (visualize)
+                    System.out.println("Current Plan: " + currentState.currentPlan);
 
             }
         }
-
-        // return "No way I reach this!!!";
-
     }
 
-    private static String SolveDF(Grid grid) throws CloneNotSupportedException {
+    private static String SolveDF(Grid grid, boolean visualize) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         Stack<State> stack = new Stack<State>();
         ArrayList<Pair> exploredCells = new ArrayList<Pair>();
@@ -1173,7 +1085,6 @@ public class CoastGuard {
         // adding the initial state to my queue
         stack.push(initialState);
 
-        int counter = 0;
         int depth = 1000;
         ArrayList<State> goals = new ArrayList<State>();
 
@@ -1185,7 +1096,7 @@ public class CoastGuard {
             byte y = currentState.currentCell.positionY;
 
             System.out.println("(" + y + "," + x + ")");
-            TrackRecord isNew = new TrackRecord(new Pair(y, x), 
+            TrackRecord isNew = new TrackRecord(new Pair(y, x),
                     currentState.grid.agent.passengers,
                     currentState.grid.agent.blackBoxesRetrieved, currentState.grid.deaths,
                     currentState.depth,
@@ -1294,30 +1205,13 @@ public class CoastGuard {
                 stack.push(downState);
             }
 
-            // System.out.println("Black boxes retrievd: " +
-            // currentState.grid.agent.blackBoxesRetrieved);
-            System.out.println("Depth: " + currentState.depth);
-            // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-            // System.out.println("Ship Passengers: " +
-            // currentState.grid.cells[3][2].ship.passengers);
-            // System.out.println(
-            // "BlackBox Destroyed: " +
-            // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-            // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-            // System.out.println(currentState.currentPlan);
-
-            counter++;
-            // System.out.println("Explored: "+ currentState.exploredCells.size());
+            if (visualize)
+                System.out.println("Current Plan: " + currentState.currentPlan);
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
                 goals.add(currentState);
                 depth = currentState.depth;
-            }
-
-            if (counter > 1000000000) {
-                break;
             }
         }
 
@@ -1340,7 +1234,7 @@ public class CoastGuard {
         }
     }
 
-    private static String SolveBF(Grid grid) throws CloneNotSupportedException {
+    private static String SolveBF(Grid grid, boolean visualize) throws CloneNotSupportedException {
         HashSet<TrackRecord> exploredStates = new HashSet<TrackRecord>();
         Queue<State> queue = new LinkedList<>();
         ArrayList<Pair> exploredCells = new ArrayList<Pair>();
@@ -1475,21 +1369,8 @@ public class CoastGuard {
                 queue.add(downState);
             }
 
-            // System.out.println("Black boxes retrievd: " +
-            // currentState.grid.agent.blackBoxesRetrieved);
-            // System.out.println("Depth: " + currentState.depth);
-            // System.out.println("OnBoard: " + currentState.grid.agent.passengers);
-            // System.out.println("Ship Passengers: " +
-            // currentState.grid.cells[3][2].ship.passengers);
-            // System.out.println(
-            // "BlackBox Destroyed: " +
-            // currentState.grid.cells[3][2].ship.blackBoxDestroyed);
-            // System.out.println("Alive Passengers: " + currentState.grid.alivePassengers);
-
-            // System.out.println(currentState.currentPlan);
-
-            // counter++;
-            // System.out.println("Explored: "+ currentState.exploredCells.size());
+            if (visualize)
+                System.out.println("Current Plan: " + currentState.currentPlan);
 
             // check if I reached a goal state and will I break
             if (isBreak(currentState)) {
@@ -1500,10 +1381,6 @@ public class CoastGuard {
 
                 return plan + ";" + deaths + ";" + retrieved + ";" + nodes;
             }
-
-            // if (counter > 10000000) {
-            // break;
-            // }
         }
 
         return "No way I reach this!!!";
@@ -1531,7 +1408,6 @@ public class CoastGuard {
         }
         return isBreak;
     }
-
 
     public static void main(String[] args) throws CloneNotSupportedException {
         System.out.println(solve("3,4;97;1,2;0,1;3,2,65;", "UC", false));
