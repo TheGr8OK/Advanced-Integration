@@ -193,6 +193,7 @@ public class Grid implements Cloneable {
                         if (cells[i][j].ship.blackBoxDamage < 20) {
                             cells[i][j].ship.addBlackBoxDamage();
                             cells[i][j].ship.blackBoxDestroyed = cells[i][j].ship.blackBoxDamage ==20 ? true: false;
+                            this.agent.blackBoxesDestroyed++;
                         }
                          else 
                             cells[i][j].ship.blackBoxDestroyed = true;

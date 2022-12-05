@@ -11,6 +11,7 @@ public class Agent implements Cloneable {
     byte y;
     byte capacity;
     byte blackBoxesRetrieved;
+    byte blackBoxesDestroyed;
 
     @Override
     public int hashCode() {
@@ -35,7 +36,7 @@ public class Agent implements Cloneable {
             return false;
         Agent other = (Agent) obj;
         // if (freeSpace != other.freeSpace)
-        //     return false;
+        // return false;
         if (passengers != other.passengers)
             return false;
         if (x != other.x)
@@ -43,7 +44,7 @@ public class Agent implements Cloneable {
         if (y != other.y)
             return false;
         // if (capacity != other.capacity)
-        //     return false;
+        // return false;
         if (blackBoxesRetrieved != other.blackBoxesRetrieved)
             return false;
         return true;
@@ -104,6 +105,7 @@ public class Agent implements Cloneable {
         State clonedState = (State) currentState.clone();
         State newState = new State(clonedState.grid.cells[y][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "pickup,", "pickup", clonedState.exploredCells);
+        newState.cost = new Cost(newState);
 
         return newState;
     }
@@ -127,6 +129,7 @@ public class Agent implements Cloneable {
         State clonedState = (State) currentState.clone();
         State newState = new State(clonedState.grid.cells[y][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "drop,", "drop", clonedState.exploredCells);
+        newState.cost = new Cost(newState);
 
         return newState;
     }
@@ -148,6 +151,7 @@ public class Agent implements Cloneable {
         State clonedState = (State) currentState.clone();
         State newState = new State(clonedState.grid.cells[y][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "retrieve,", "retrieve", clonedState.exploredCells);
+        newState.cost = new Cost(newState);
 
         return newState;
     }
@@ -159,24 +163,25 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        if(currentState.depth>1 && currentState.stateType.equals("right")){
+        if (currentState.depth > 1 && currentState.stateType.equals("right")) {
             return null;
         }
-        
+
         // creating a new state to move left
         // System.out.println("4th clone");
         State clonedState = (State) currentState.clone();
         State newState = new State(clonedState.grid.cells[y][x - 1], clonedState.grid,
                 clonedState, currentState.currentPlan + "left,", "left", clonedState.exploredCells);
+        newState.cost = new Cost(newState);
 
         // check if i visited this state already
         // TrackRecord isNew = new TrackRecord(newState);
 
         // System.out.println(check(isNew, currentState.exploredStates) +" left");
         // if (check(isNew, currentState.exploredStates)) {
-        //     return null;
+        // return null;
         // } else {
-        //     newState.exploredStates.add(isNew);
+        // newState.exploredStates.add(isNew);
         // }
 
         return newState;
@@ -189,7 +194,7 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        if(currentState.depth>1 && currentState.stateType.equals("down")){
+        if (currentState.depth > 1 && currentState.stateType.equals("down")) {
             return null;
         }
 
@@ -198,15 +203,16 @@ public class Agent implements Cloneable {
         State clonedState = (State) currentState.clone();
         State newState = new State(clonedState.grid.cells[y - 1][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "up,", "up", clonedState.exploredCells);
+        newState.cost = new Cost(newState);
 
         // check if i visited this state already
         // TrackRecord isNew = new TrackRecord(newState);
 
         // System.out.println(check(isNew, currentState.exploredStates)+ " up");
         // if (check(isNew, currentState.exploredStates)) {
-        //     return null;
+        // return null;
         // } else {
-        //     newState.exploredStates.add(isNew);
+        // newState.exploredStates.add(isNew);
         // }
 
         return newState;
@@ -219,7 +225,7 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        if(currentState.depth>1 && currentState.stateType.equals("left")){
+        if (currentState.depth > 1 && currentState.stateType.equals("left")) {
             return null;
         }
 
@@ -229,14 +235,15 @@ public class Agent implements Cloneable {
 
         State newState = new State(clonedState.grid.cells[y][x + 1], clonedState.grid,
                 clonedState, currentState.currentPlan + "right,", "right", clonedState.exploredCells);
+        newState.cost = new Cost(newState);
 
         // check if i visited this state already
         // TrackRecord isNew = new TrackRecord(newState);
-        //   System.out.println(check(isNew, currentState.exploredStates)+ " right");
+        // System.out.println(check(isNew, currentState.exploredStates)+ " right");
         // if (check(isNew, currentState.exploredStates)) {
-        //     return null;
+        // return null;
         // } else {
-        //     newState.exploredStates.add(isNew);
+        // newState.exploredStates.add(isNew);
         // }
 
         return newState;
@@ -249,7 +256,7 @@ public class Agent implements Cloneable {
             return null;
         }
 
-        if(currentState.depth>1 && currentState.stateType.equals("up")){
+        if (currentState.depth > 1 && currentState.stateType.equals("up")) {
             return null;
         }
 
@@ -259,14 +266,15 @@ public class Agent implements Cloneable {
         State clonedState = (State) currentState.clone();
         State newState = new State(clonedState.grid.cells[y + 1][x], clonedState.grid,
                 clonedState, currentState.currentPlan + "down,", "down", clonedState.exploredCells);
+        newState.cost = new Cost(newState);
 
         // check if i visited this state already
         // TrackRecord isNew = new TrackRecord(newState);
         // System.out.println(check(isNew, currentState.exploredStates)+ " down");
         // if (check(isNew, currentState.exploredStates)) {
-        //     return null;
+        // return null;
         // } else {
-        //     newState.exploredStates.add(isNew);
+        // newState.exploredStates.add(isNew);
         // }
 
         return newState;
@@ -290,7 +298,8 @@ public class Agent implements Cloneable {
             currentState.grid.agent.passengers = currentState.grid.agent.capacity;
             currentState.grid.agent.freeSpace = 0;
         }
-        // System.out.println("During CurrentState Passengers: " + currentState.grid.agent.passengers);
+        // System.out.println("During CurrentState Passengers: " +
+        // currentState.grid.agent.passengers);
     }
 
     // do action drop passengers in station
@@ -365,6 +374,4 @@ public class Agent implements Cloneable {
         return (Agent) super.clone();
     }
 
-
-    
 }

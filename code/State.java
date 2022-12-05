@@ -14,6 +14,7 @@ public class State implements Cloneable {
     String stateType;
     // int passengers;
     int depth;
+    Cost cost;
     
 
     @Override
@@ -58,6 +59,21 @@ public class State implements Cloneable {
 
     // public State(){}
     
+
+    public State(Cell currentCell, Grid grid, State previousState, String currentPlan, 
+    String stateType, ArrayList<Pair> exploredCells, int depth, Cost c){
+
+        this.currentCell = currentCell;
+        this.grid= grid;
+        this.previousState = previousState;
+        this.depth = depth;
+        this.currentPlan = currentPlan;
+        // this.exploredStates = exploredStates;
+        this.stateType = stateType;
+        this.exploredCells = exploredCells;
+        this.cost =c;
+    }
+
     public State(Cell currentCell, Grid grid, State previousState, String currentPlan, 
     String stateType, ArrayList<Pair> exploredCells, int depth){
 
@@ -122,5 +138,52 @@ public class State implements Cloneable {
         clonedState.currentCell = clonedState.currentCell.clone();
 
         return clonedState;
+    }
+
+    //heuristic 1 implementation
+    public double h1(){
+        double cost=0;
+        byte x = currentCell.positionX;
+        byte y = currentCell.positionY;
+        Ship closesetShip = grid.ships[0];
+        Station closesetStation = grid.stations[0];
+
+        for (int i = 0; i < grid.ships.length; i++) {
+            byte distance = (byte) (Math.abs(grid.ships[i].y - y) + Math.abs(grid.ships[i].x - x));
+            byte closesetDistance = (byte) (Math.abs(grid.ships[i].y - closesetShip.y) + Math.abs(grid.ships[i].x - closesetShip.x));
+           
+            if(distance < closesetDistance && grid.cells[grid.ships[i].y][grid.ships[i].x].ship.passengers - distance > 0)
+                closesetShip = grid.ships[i];
+        }
+
+        for (int j = 0; j < grid.stations.length; j++) {
+            byte distance = (byte) (Math.abs(grid.stations[j].y - y) + Math.abs(grid.stations[j].x - x));
+            byte closesetDistance = (byte) (Math.abs(grid.stations[j].y - closesetStation.y) + Math.abs(grid.stations[j].x - closesetStation.x));
+
+            if(distance < closesetDistance){
+                closesetStation = grid.stations[j];
+            }
+        }
+
+        byte shipDistance = (byte) (Math.abs(closesetShip.y - y) + Math.abs(closesetShip.x - x));
+        byte stationDistance = (byte) (Math.abs(closesetStation.y - y) + Math.abs(closesetStation.x - x));
+        
+        byte numberOfBoxesLeft=0;
+        int numberOfAlivePeople=0;
+        for (int i = 0; i < grid.ships.length; i++) {
+            if(!grid.cells[grid.ships[i].y][grid.ships[i].x].ship.blackBoxDestroyed){
+                numberOfAlivePeople += grid.cells[grid.ships[i].y][grid.ships[i].x].ship.passengers;
+                numberOfBoxesLeft++;
+        }
+    }
+
+        cost = (stationDistance * 0.1 * numberOfBoxesLeft * numberOfAlivePeople) + ((0.01 * closesetShip.passengers)/(closesetShip.passengers-shipDistance)) + (0.1 * numberOfBoxesLeft);
+
+        return cost;
+    }
+
+    //heuristic 2 implementation
+    public int h2() {
+        return 0;
     }
 }
